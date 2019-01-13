@@ -1,6 +1,5 @@
-#include <stdio.h>
-#include "double_metaphone.h"
-#include "levenshtein.h"
+#include "lib.h"
+HASH(fname, char *, struct fname, char *, HASHSIZE)
 /*
  1. Import list of American names
  2. Create a hash of Metaphone to American names.
@@ -11,15 +10,19 @@
 */
 
 int main(int argc, char **argv) {
-
-  if (argc < 2) return 0;
-  char *codes[2]; 
+  if (argc < 3) return 0;
+ 
   char *name = argv[1];
+  char *filename = argv[2];
+  char *names[TOTALNAMES];
+  load_data(names, filename, MAXLINE, 4, (item_add) _fname_add);
+
+  /*
   DoubleMetaphone(name, codes);
 
   printf("%s, %s\n", codes[0], codes[1]);
 
   printf("%s score with %s is %lu", name, "random name\n", levenshtein(name, "hello"));
-
+*/
   return 0;
 }
