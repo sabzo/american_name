@@ -51,12 +51,13 @@ char ** delim(char **words, char *str, char delim) {
 }
 
 // load data
-void load_data(name_rank *names[], char *filename, int line_length, int max_line_words, item_add add) {
-  int i = 0;
+int load_data(name_rank *names[], char *filename, int line_length, int max_line_words, item_add add) {
+  int i = 0; //total names
   FILE *fp;
   char **words = calloc(max_line_words + 1, sizeof(char *));
   char *line = malloc(line_length);
   char *codes[2];
+  int score;
 
   // Open ratings file
    if ((fp = fopen (filename, "r")) == NULL) 
@@ -64,9 +65,12 @@ void load_data(name_rank *names[], char *filename, int line_length, int max_line
 
    // Add/update user ratings
    while (fgets(line, line_length, fp) != NULL) {
-       delim(words, line, '\n'); 
+       delim(words, line, ','); 
        DoubleMetaphone(*words, codes);
        //add(codes[0], *words);
+       
+       score = (int) atof(*(words + 2));
+       if (score < 400) continue;
        names[i] = malloc(sizeof(name_rank));
        names[i]->name = malloc(sizeof(char) * strlen(*words));
        names[i]->code = malloc(sizeof(char) * strlen(codes[0]));
@@ -83,13 +87,14 @@ void load_data(name_rank *names[], char *filename, int line_length, int max_line
    }
    free (temp);
    fclose(fp);
+   return i;
 }
 
 // score each entry in names according to how similar it is to name
-void score_name(char *code, name_rank *names[]) {
-  for (int i = 0; i < TOTALNAMES; i++) {
+void score_name(char *code, name_rank *names[], int total_names, int weight) {
+  for (int i = 0; i < total_names; i++) {
      names[i]->score = (int) levenshtein(code, names[i]->code);
-     if (names[i]->score <= 1) printf("%s\n", names[i]->name);
+     if (names[i]->score <= weight) printf("%s \n", names[i]->name);
   }  
 }
 
@@ -110,9 +115,9 @@ void sort_names_by_score(name_rank *names[]) {
   qsort(names, TOTALNAMES, sizeof(name_rank *), (int (*)(const void *, const void*)) score_compare); 
 }
 
-void get_similar_sounding_names(char *name, name_rank *names[]) {
+void get_similar_sounding_names(char *name, name_rank *names[], int total_names, int weight) {
     char *codes[2];
     DoubleMetaphone(name, codes);
-    score_name(codes[0], names);
+    score_name(codes[0], names, total_names, weight);
    // sort_names_by_score(names); 
 }
