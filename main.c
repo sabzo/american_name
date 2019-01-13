@@ -1,13 +1,4 @@
 #include "lib.h"
-HASH(fname, char *, struct fname, char *, HASHSIZE)
-/*
- 1. Import list of American names into names_rank array [{"metaphone": "score"}]
- 2. Create a hash of Metaphone to American names.
- 3. Convert input name to Metaphone
- 4. Get Levenshtein distance between input and each Metaphone into array [{"metaphone": "score"}]
- 5. Sort array of metaphones based on score
- 6. Convert top entries in array from metaphone to American 
-*/
 
 int main(int argc, char **argv) {
   if (argc < 4) return 0;
