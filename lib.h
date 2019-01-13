@@ -70,9 +70,9 @@ type_next *_##name##_remove(type_key key) { \
 
 // double metaphone and a rank (to be stored in array of name-ranks)
 typedef struct name_rank {
+  int score;
   char *name;
   char * code;
-  int score;
 } name_rank;
 
 // typedef for add item function

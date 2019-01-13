@@ -88,7 +88,8 @@ void load_data(name_rank *names[], char *filename, int line_length, int max_line
 // score each entry in names according to how similar it is to name
 void score_name(char *code, name_rank *names[]) {
   for (int i = 0; i < TOTALNAMES; i++) {
-     names[i]->score = levenshtein(code, names[i]->code);
+     names[i]->score = (int) levenshtein(code, names[i]->code);
+     if (names[i]->score <= 1) printf("%s\n", names[i]->name);
   }  
 }
 
@@ -113,12 +114,5 @@ void get_similar_sounding_names(char *name, name_rank *names[]) {
     char *codes[2];
     DoubleMetaphone(name, codes);
     score_name(codes[0], names);
-    for (int i = 0; i < 10; i++) {
-      printf("%s:%s -- %s %d\n", name, names[i]->name, names[i]->code, names[i]->score);
-    }
-    printf("---\n\n\n");
-    sort_names_by_score(names); 
-    for (int i = 0; i < 3000; i++) {
-      printf("%s:%s -- %s %d\n", name, names[i]->name, names[i]->code, names[i]->score);
-    }
+   // sort_names_by_score(names); 
 }
