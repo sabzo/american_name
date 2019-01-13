@@ -68,12 +68,15 @@ type_next *_##name##_remove(type_key key) { \
   return 0; \
 }
 
-
+// double metaphone and a rank (to be stored in array of name-ranks)
+typedef struct name_rank {
+  char *name;
+  char * code;
+  int score;
+} name_rank;
 
 // typedef for add item function
 typedef void * (*item_add)(void *, char *);
 
-
 //void load_data(char *filename);
 void error(char *msg);
-

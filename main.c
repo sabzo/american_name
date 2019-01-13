@@ -1,7 +1,7 @@
 #include "lib.h"
 HASH(fname, char *, struct fname, char *, HASHSIZE)
 /*
- 1. Import list of American names
+ 1. Import list of American names into names_rank array [{"metaphone": "score"}]
  2. Create a hash of Metaphone to American names.
  3. Convert input name to Metaphone
  4. Get Levenshtein distance between input and each Metaphone into array [{"metaphone": "score"}]
@@ -14,14 +14,18 @@ int main(int argc, char **argv) {
  
   char *name = argv[1];
   char *filename = argv[2];
-  char *names[TOTALNAMES];
+  name_rank *names[TOTALNAMES];
+  char *codes[2];
   load_data(names, filename, MAXLINE, 4, (item_add) _fname_add);
 
-  /*
-  DoubleMetaphone(name, codes);
+  //DoubleMetaphone(name, codes);
 
-  printf("%s, %s\n", codes[0], codes[1]);
-
+  get_similar_sounding_names(name, names);
+  
+  for (int i = 0; i < 10; i++) {
+    //printf("%s, %s\n", n[0], codes[1]);
+  } 
+/*
   printf("%s score with %s is %lu", name, "random name\n", levenshtein(name, "hello"));
 */
   return 0;

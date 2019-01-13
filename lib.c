@@ -51,7 +51,7 @@ char ** delim(char **words, char *str, char delim) {
 }
 
 // load data
-void load_data(char *names[], char *filename, int line_length, int max_line_words, item_add add) {
+void load_data(name_rank *names[], char *filename, int line_length, int max_line_words, item_add add) {
   int i = 0;
   FILE *fp;
   char **words = calloc(max_line_words + 1, sizeof(char *));
@@ -66,10 +66,13 @@ void load_data(char *names[], char *filename, int line_length, int max_line_word
    while (fgets(line, line_length, fp) != NULL) {
        delim(words, line, '\n'); 
        DoubleMetaphone(*words, codes);
-       add(codes[0], *words);
-       names[i] = malloc(sizeof(char) * strlen(*words));
-       strcpy(names[i++], *words);
-       printf("%s, %s\n", codes[0], names[i-1]);
+       //add(codes[0], *words);
+       names[i] = malloc(sizeof(name_rank));
+       names[i]->name = malloc(sizeof(char) * strlen(*words));
+       names[i]->code = malloc(sizeof(char) * strlen(codes[0]));
+	   strcpy(names[i]->name, *words);
+       strcpy(names[i++]->code, codes[0]);
+       //printf("%s, %s\n", codes[0], names[i-1]->name);
    }
 
    free(line);
@@ -80,4 +83,42 @@ void load_data(char *names[], char *filename, int line_length, int max_line_word
    }
    free (temp);
    fclose(fp);
+}
+
+// score each entry in names according to how similar it is to name
+void score_name(char *code, name_rank *names[]) {
+  for (int i = 0; i < TOTALNAMES; i++) {
+     names[i]->score = levenshtein(code, names[i]->code);
+  }  
+}
+
+/* Score comparison function: greatest to lowest */
+int score_compare(const name_rank *r1, const name_rank *r2) {
+  int eq;
+  if (r1->score == r2->score)
+    eq = 0;
+  else if (r1->score < r2->score)
+    eq = 1;
+  else
+    eq = -1;
+  return eq;
+}
+
+// sort names by rank
+void sort_names_by_score(name_rank *names[]) {
+  qsort(names, TOTALNAMES, sizeof(name_rank *), (int (*)(const void *, const void*)) score_compare); 
+}
+
+void get_similar_sounding_names(char *name, name_rank *names[]) {
+    char *codes[2];
+    DoubleMetaphone(name, codes);
+    score_name(codes[0], names);
+    for (int i = 0; i < 10; i++) {
+      printf("%s:%s -- %s %d\n", name, names[i]->name, names[i]->code, names[i]->score);
+    }
+    printf("---\n\n\n");
+    sort_names_by_score(names); 
+    for (int i = 0; i < 3000; i++) {
+      printf("%s:%s -- %s %d\n", name, names[i]->name, names[i]->code, names[i]->score);
+    }
 }
