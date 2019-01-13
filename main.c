@@ -8,7 +8,7 @@ int main(int argc, char **argv) {
   int weight = atoi(argv[3]);
   name_rank *names[TOTALNAMES];
   char *codes[2];
-  int total_names = load_data(names, filename, MAXLINE, 4, (item_add) _fname_add);
+  int total_names = load_data(names, filename, MAXLINE, 4);
 
   //DoubleMetaphone(name, codes);
 

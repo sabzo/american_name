@@ -51,7 +51,7 @@ char ** delim(char **words, char *str, char delim) {
 }
 
 // load data
-int load_data(name_rank *names[], char *filename, int line_length, int max_line_words, item_add add) {
+int load_data(name_rank *names[], char *filename, int line_length, int max_line_words) {
   int i = 0; //total names
   FILE *fp;
   char **words = calloc(max_line_words + 1, sizeof(char *));
@@ -67,10 +67,9 @@ int load_data(name_rank *names[], char *filename, int line_length, int max_line_
    while (fgets(line, line_length, fp) != NULL) {
        delim(words, line, ','); 
        DoubleMetaphone(*words, codes);
-       //add(codes[0], *words);
        
        score = (int) atof(*(words + 2));
-       if (score < 400) continue;
+       if (score < 200) continue;
        names[i] = malloc(sizeof(name_rank));
        names[i]->name = malloc(sizeof(char) * strlen(*words));
        names[i]->code = malloc(sizeof(char) * strlen(codes[0]));

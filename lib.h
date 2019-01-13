@@ -1,3 +1,6 @@
+#ifndef MAINLIB
+#define MAINLIB
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,5 +20,8 @@ typedef struct name_rank {
 // typedef for add item function
 typedef void * (*item_add)(void *, char *);
 
+void get_similar_sounding_names(char *, name_rank *[], int, int);
+int load_data(name_rank *[], char *, int, int);
 //void load_data(char *filename);
 void error(char *msg);
+#endif
