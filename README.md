@@ -11,8 +11,11 @@ I'm using the U.S. Census'  publicly available [dataset](https://www.ssa.gov/oac
 of the top popular ~2000 names from 2008.
 
 ## Install
-* compile: `gcc main.c double_metaphone.c levenshtein.c -o an`
+* compile: `gcc main.c lib.c double_metaphone.c levenshtein.c -o an`
 
+## Run
+`./an <name> <csv file where names are in first column> <sensitivity-score 0 being strongest>`
+This outputs a list of similar names that are <= sensitivity (similarity) score.
 
 ### Open Source Libraries
 C version
